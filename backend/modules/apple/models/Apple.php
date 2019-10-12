@@ -3,78 +3,69 @@
  * Created by PhpStorm.
  * User: viktor
  * Date: 13.10.2019
- * Time: 4:43
+ * Time: 5:53
  */
 
 namespace backend\modules\apple\models;
 
-use yii\behaviors\TimestampBehavior;
-use yii\db\ActiveRecord;
+use \backend\modules\apple\models\db\Apple as DbAppleModel;
+use backend\modules\apple\models\states\apple\AbstractState;
+use backend\modules\apple\models\states\apple\OnTree;
+use backend\modules\apple\models\states\apple\UnderTree;
 
-/**
- * Apple model
- *
- * @property integer $id
- * @property string $color
- * @property integer $size_percent
- * @property integer $state
- * @property integer $fall_date
- * @property integer $created_at
- * @property integer $updated_at
- */
-
-class Apple extends ActiveRecord
+class Apple
 {
-    const STATUS_ON_TREE = 1;
-    const STATUS_UNDER_TREE = 2;
-    const BASE_PERCENT_SIZE = 100;
-
 
     /**
-     * {@inheritdoc}
+     * @var DbAppleModel
      */
-    public static function tableName()
+    protected $dbModel;
+
+    /**
+     * @var AbstractState
+     */
+    protected $state;
+
+    public function __construct()
     {
-        return '{{%apple}}';
+        $this->dbModel = new DbAppleModel();
+        $this->state = new OnTree($this);
     }
 
     /**
-     * {@inheritdoc}
+     * @param $name
+     * @return mixed
      */
-    public function behaviors()
+    public function __get($name)
     {
-        return [
-            TimestampBehavior::className(),
-        ];
+        return $this->dbModel->$name;
     }
 
     /**
-     * {@inheritdoc}
+     * @return DbAppleModel
      */
-    public function rules()
+    public function getDbModel()
     {
-        return [
-            [['color'], 'required'],
-            [['color'], 'string', 'max' => 255],
-            [['fall_date', 'created_at', 'updated_at'], 'integer'],
-            [['size_percent', 'state'], 'integer', 'max' => 3],
-            ['status', 'in', 'range' => [self::STATUS_ON_TREE, self::STATUS_UNDER_TREE,]],
-        ];
+        return $this->dbModel;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
+    public function changeState($state)
     {
-        return [
-            'id' => 'ID',
-            'color' => 'Цвет',
-            'size_percent' => 'Размер в процентах',
-            'state' => 'Состояние',
-            'fall_date' => 'Дата падения',
-            'created_at' => 'Дата создания',
-            'updated_at' => 'Дата последнего обновления',
-        ];
+        $this->state = $state;
+    }
+
+    public function fallToGround()
+    {
+        $this->state->fallToGround();
+    }
+
+    public function eat($percent)
+    {
+        $this->state->eat($percent);
+    }
+
+    public function remove()
+    {
+        $this->state->remove();
     }
 }
