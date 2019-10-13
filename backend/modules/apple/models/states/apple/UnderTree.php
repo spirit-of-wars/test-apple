@@ -58,7 +58,7 @@ class UnderTree extends AbstractState
 
     protected function checkRotten()
     {
-        if($this->getContext()->getDbModel()->fall_date > 12600) {
+        if(time() - $this->getContext()->getDbModel()->fall_date > Rotten::ROTTEN_TIME) {
             return true;
         }
         return false;

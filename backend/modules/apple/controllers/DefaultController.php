@@ -2,7 +2,7 @@
 
 namespace backend\modules\apple\controllers;
 
-use backend\modules\apple\models\Apple;
+use \backend\modules\apple\collections\Apple;
 use yii\web\Controller;
 
 /**
@@ -11,12 +11,15 @@ use yii\web\Controller;
 class DefaultController extends Controller
 {
     /**
-     * Renders the index view for the module
      * @return string
+     * @throws \yii\base\Exception
      */
     public function actionIndex()
     {
-        new Apple(null, 'brown');
+        $appleCollection = new Apple();
+//        $appleCollection->create('brown');
+        $apple = $appleCollection->get(5);
+        $apple->eat(99);
         return $this->render('index');
     }
 }

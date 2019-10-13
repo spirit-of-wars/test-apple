@@ -12,6 +12,7 @@ use yii\base\Exception;
 
 class Rotten extends AbstractState
 {
+    const ROTTEN_TIME = 3600*5;
     /**
      * @throws Exception
      */

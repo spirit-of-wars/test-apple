@@ -20,6 +20,7 @@ class OnTree extends AbstractState
     {
         $dbModel = $this->getContext()->getDbModel();
         $dbModel->status = Apple::STATUS_UNDER_TREE;
+        $dbModel->fall_date = time();
         if(!$dbModel->save()) {
             throw new Exception('Ошибка сохранения яблока');
         }

@@ -57,8 +57,7 @@ class Apple extends ActiveRecord
         return [
             [['color'], 'required'],
             [['color'], 'string', 'max' => 255],
-            [['fall_date', 'created_at', 'updated_at'], 'integer'],
-            [['size_percent', 'status'], 'integer', 'max' => 3],
+            [['size_percent', 'status', 'fall_date', 'created_at', 'updated_at'], 'integer'],
             ['status', 'in', 'range' => [self::STATUS_ON_TREE, self::STATUS_UNDER_TREE,]],
         ];
     }
