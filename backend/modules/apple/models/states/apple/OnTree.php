@@ -13,13 +13,18 @@ use yii\base\Exception;
 
 class OnTree extends AbstractState
 {
+    /**
+     * @throws Exception
+     */
     public function fallToGround()
     {
-        $this->context->getDbModel()->status = Apple::STATUS_UNDER_TREE;
-        $this->context->getDbModel()->save();
+        $dbModel = $this->getContext()->getDbModel();
+        $dbModel->status = Apple::STATUS_UNDER_TREE;
+        if(!$dbModel->save()) {
+            throw new Exception('Ошибка сохранения яблока');
+        }
 
-        $underTreeState = new UnderTree($this->context);
-        $this->context->changeState($underTreeState);
+        $this->changeStateToUnderTree();
     }
 
     /**
@@ -37,5 +42,11 @@ class OnTree extends AbstractState
     public function remove()
     {
         throw new Exception('Удалить нельзя, яблоко на дереве');
+    }
+
+    protected function changeStateToUnderTree()
+    {
+        $underTreeState = new UnderTree($this->getStateSwitcher());
+        $this->getStateSwitcher()->changeState($underTreeState);
     }
 }

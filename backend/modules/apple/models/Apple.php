@@ -9,10 +9,18 @@
 namespace backend\modules\apple\models;
 
 use \backend\modules\apple\models\db\Apple as DbAppleModel;
-use backend\modules\apple\models\states\apple\AbstractState;
-use backend\modules\apple\models\states\apple\OnTree;
-use backend\modules\apple\models\states\apple\UnderTree;
+use backend\modules\apple\models\states\apple\StateSwitcher;
 
+/**
+ *
+ * @property integer $id
+ * @property string $color
+ * @property integer $size_percent
+ * @property integer $status
+ * @property integer $fall_date
+ * @property integer $created_at
+ * @property integer $updated_at
+ */
 class Apple
 {
 
@@ -22,14 +30,14 @@ class Apple
     protected $dbModel;
 
     /**
-     * @var AbstractState
+     * @var StateSwitcher
      */
-    protected $state;
+    protected $stateSwitcher;
 
     public function __construct()
     {
         $this->dbModel = new DbAppleModel();
-        $this->state = new OnTree($this);
+        $this->stateSwitcher = new StateSwitcher($this);
     }
 
     /**
@@ -49,23 +57,26 @@ class Apple
         return $this->dbModel;
     }
 
-    public function changeState($state)
-    {
-        $this->state = $state;
-    }
 
     public function fallToGround()
     {
-        $this->state->fallToGround();
+        $this->stateSwitcher->getState()->fallToGround();
     }
 
+    /**
+     * @param $percent
+     * @throws \yii\base\Exception
+     */
     public function eat($percent)
     {
-        $this->state->eat($percent);
+        $this->stateSwitcher->getState()->eat($percent);
     }
 
+    /**
+     * @throws \yii\base\Exception
+     */
     public function remove()
     {
-        $this->state->remove();
+        $this->stateSwitcher->getState()->remove();
     }
 }

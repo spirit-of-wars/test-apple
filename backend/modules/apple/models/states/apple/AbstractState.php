@@ -13,21 +13,30 @@ use \backend\modules\apple\models\Apple;
 abstract class AbstractState
 {
     /**
-     * @var Apple
+     * @var StateSwitcher
      */
-    protected $context;
+    protected $stateSwitcher;
 
     /**
      * AbstractState constructor.
-     * @param Apple $model
+     * @param StateSwitcher $stateSwitcher
      */
-    public function __construct(Apple $context)
+    public function __construct(StateSwitcher $stateSwitcher)
     {
-        $this->context = $context;
+        $this->stateSwitcher = $stateSwitcher;
     }
 
     abstract public function fallToGround();
     abstract public function eat($percent);
     abstract public function remove();
 
+    public function getContext()
+    {
+        return $this->stateSwitcher->getContext();
+    }
+
+    public function getStateSwitcher()
+    {
+        return $this->stateSwitcher;
+    }
 }

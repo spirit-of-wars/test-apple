@@ -8,7 +8,6 @@
 
 namespace  backend\modules\apple\models\states\apple;
 
-use backend\modules\apple\models\db\Apple;
 use yii\base\Exception;
 
 class UnderTree extends AbstractState
@@ -21,14 +20,20 @@ class UnderTree extends AbstractState
         throw new Exception('Уронить нельзя, яблоко на земле');
     }
 
+    /**
+     * @param $percent integer
+     * @throws Exception
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
+     */
     public function eat($percent)
     {
-        //@todo намутить логику
-        $this->context->getDbModel()->size_percent -= $percent;
-        $this->context->getDbModel()->save();
-
-        $underTreeState = new UnderTree($this->context);
-        $this->context->changeState($underTreeState);
+        if($this->checkRotten()) {
+            $this->changeStateToRotten();
+            $this->getStateSwitcher()->getState()->eat($percent);
+            return;
+        }
+        $this->eatBehavior($percent);
     }
 
     /**
@@ -38,12 +43,53 @@ class UnderTree extends AbstractState
      */
     public function remove()
     {
-        if($this->context->getDbModel()->size_percent > 0){
+        if($this->checkRotten()) {
+            $this->changeStateToRotten();
+            $this->getStateSwitcher()->getState()->remove();
+        }
+        if($this->getContext()->getDbModel()->size_percent > 0){
             throw new Exception('Удалить нельзя, яблоко не съедено');
         }
         //@todo проверить как эта шляпа работает
-        if($this->context->getDbModel()->delete()) {
-            unset($this->context);
+        if($this->getContext()->getDbModel()->delete()) {
+            return;
         }
+    }
+
+    protected function checkRotten()
+    {
+        if($this->getContext()->getDbModel()->fall_date > 12600) {
+            return true;
+        }
+        return false;
+    }
+
+    protected function changeStateToRotten()
+    {
+        $rottenState = new Rotten($this->getStateSwitcher());
+        $this->getStateSwitcher()->changeState($rottenState);
+    }
+
+
+    /**
+     * @param int $percent
+     * @throws Exception
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
+     */
+    protected function eatBehavior($percent = 0)
+    {
+        $percent = abs($percent);
+        $dbModel = $this->getContext()->getDbModel();
+        if($dbModel->size_percent < $percent) {
+            throw new Exception('Нельзя откусить больше чем осталось');
+        }
+        $dbModel->size_percent -= $percent;
+        if($dbModel->size_percent > 0) {
+            $dbModel->save();
+        } else {
+            $this->remove();
+        }
+
     }
 }
