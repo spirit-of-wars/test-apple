@@ -15,9 +15,17 @@ class StateSwitcher
      * @var AbstractState
      */
     protected $state;
+
+    /**
+     * @var Apple
+     */
     protected $context;
 
 
+    /**
+     * StateSwitcher constructor.
+     * @param Apple $context
+     */
     public function __construct(Apple $context)
     {
         $this->context = $context;
@@ -40,6 +48,9 @@ class StateSwitcher
         return $this->state;
     }
 
+    /**
+     * @return Apple
+     */
     public function getContext()
     {
         return $this->context;

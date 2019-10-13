@@ -29,6 +29,7 @@ class Apple extends ActiveRecord
     const STATUS_UNDER_TREE = 2;
     const BASE_PERCENT_SIZE = 100;
 
+    const DEFAULT_COLOR = 'green';
 
     /**
      * {@inheritdoc}

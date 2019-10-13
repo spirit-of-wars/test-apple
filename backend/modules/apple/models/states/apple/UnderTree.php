@@ -64,6 +64,7 @@ class UnderTree extends AbstractState
         return false;
     }
 
+
     protected function changeStateToRotten()
     {
         $rottenState = new Rotten($this->getStateSwitcher());

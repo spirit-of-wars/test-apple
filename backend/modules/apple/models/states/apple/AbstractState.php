@@ -30,11 +30,17 @@ abstract class AbstractState
     abstract public function eat($percent);
     abstract public function remove();
 
+    /**
+     * @return Apple
+     */
     public function getContext()
     {
         return $this->stateSwitcher->getContext();
     }
 
+    /**
+     * @return StateSwitcher
+     */
     public function getStateSwitcher()
     {
         return $this->stateSwitcher;

@@ -2,6 +2,7 @@
 
 namespace backend\modules\apple\controllers;
 
+use backend\modules\apple\models\Apple;
 use yii\web\Controller;
 
 /**
@@ -15,6 +16,7 @@ class DefaultController extends Controller
      */
     public function actionIndex()
     {
+        new Apple(null, 'brown');
         return $this->render('index');
     }
 }

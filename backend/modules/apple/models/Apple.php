@@ -34,10 +34,22 @@ class Apple
      */
     protected $stateSwitcher;
 
-    public function __construct()
+    public function __construct(DbAppleModel $dbModel = null, $color = '')
     {
-        $this->dbModel = new DbAppleModel();
+
+        $this->initDbModel($dbModel, $color);
         $this->stateSwitcher = new StateSwitcher($this);
+    }
+
+    protected function initDbModel(DbAppleModel $dbModel = null, $color = '')
+    {
+        if($dbModel) {
+            $this->dbModel = $dbModel;
+        } else {
+            $this->dbModel = new DbAppleModel();
+            $this->dbModel->color = $color ?: DbAppleModel::DEFAULT_COLOR;
+            $this->dbModel->save();
+        }
     }
 
     /**
