@@ -18,8 +18,8 @@ class DefaultController extends Controller
     {
         $appleCollection = new Apple();
 //        $appleCollection->create('brown');
-        $apple = $appleCollection->get(5);
-        $apple->eat(99);
+//        $apple = $appleCollection->get(5);
+//        $apple->eat(99);
         return $this->render('index');
     }
 }
