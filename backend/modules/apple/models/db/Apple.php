@@ -32,6 +32,26 @@ class Apple extends ActiveRecord
     const DEFAULT_COLOR = 'green';
 
     /**
+     * @return array
+     */
+    public function getPermittedColors()
+    {
+        return [
+            'green', 'yellow', 'brown', 'red',
+        ];
+    }
+
+    /**
+     * @return string
+     */
+    public function getRandColor()
+    {
+        $colorArr = $this->getPermittedColors();
+
+        return $colorArr[rand(0,count($colorArr)-1)];
+    }
+
+    /**
      * {@inheritdoc}
      */
     public static function tableName()
@@ -54,11 +74,16 @@ class Apple extends ActiveRecord
      */
     public function rules()
     {
+
+
         return [
             [['color'], 'required'],
             [['color'], 'string', 'max' => 255],
+            ['color', 'in', 'range' => $this->getPermittedColors()],
             [['size_percent', 'status', 'fall_date', 'created_at', 'updated_at'], 'integer'],
+            ['status', 'default', 'value' => self::STATUS_ON_TREE],
             ['status', 'in', 'range' => [self::STATUS_ON_TREE, self::STATUS_UNDER_TREE,]],
+
         ];
     }
 

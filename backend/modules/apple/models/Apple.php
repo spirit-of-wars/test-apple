@@ -47,7 +47,7 @@ class Apple
             $this->dbModel = $dbModel;
         } else {
             $this->dbModel = new DbAppleModel();
-            $this->dbModel->color = $color ?: DbAppleModel::DEFAULT_COLOR;
+            $this->dbModel->color = $color ?: $this->dbModel->getRandColor();
             $this->dbModel->save();
         }
     }

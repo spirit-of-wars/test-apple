@@ -40,6 +40,16 @@ class Apple
     }
 
     /**
+     * @param $id
+     */
+    public function remove($id)
+    {
+        if(isset($this->collection[$id])) {
+            unset($this->collection[$id]);
+        }
+    }
+
+    /**
      * @return ModelApple[]
      */
     public function getAll()
@@ -48,9 +58,37 @@ class Apple
     }
 
     /**
+     * @return ModelApple[]
+     */
+    public function getOnTreeApples()
+    {
+        $apples = [];
+        foreach($this->collection as $apple) {
+            if($apple->status === DbApple::STATUS_ON_TREE) {
+                $apples[] = $apple;
+            }
+        }
+        return $apples;
+    }
+
+    /**
+     * @return ModelApple[]
+     */
+    public function getUnderTreeApples()
+    {
+        $apples = [];
+        foreach($this->collection as $apple) {
+            if($apple->status === DbApple::STATUS_UNDER_TREE) {
+                $apples[] = $apple;
+            }
+        }
+        return $apples;
+    }
+
+    /**
      * @param $color
      */
-    public function create($color)
+    public function create($color = '')
     {
         $modelApple = new ModelApple(null, $color);
         $id = $modelApple->getDbModel()->id;

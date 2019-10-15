@@ -1,3 +1,5 @@
+@import url("https://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css");
+
 html,
 body {
     height: 100%;
@@ -118,4 +120,59 @@ a.desc:after {
 
 .nav > li > form > button.logout:focus {
     outline: none;
+}
+
+.cont {
+
+}
+
+.tree-head {
+    background: #40b340;
+    border-radius: 20px;
+    height: 170px;
+    width: 100%;
+    position: relative;
+}
+
+.tree-trunk {
+    background: #3c0f0f;
+    margin: 0 auto;
+    height: 600px;
+    width: 164px;
+    position: relative;
+}
+.ground {
+    background: #969445;
+    height: 30px;
+    width: 100%;
+    position: relative;
+}
+
+.apple {
+    font-size: 60px;
+    position: absolute;
+}
+
+.apple i:hover {
+    color: black;
+    cursor: pointer;
+}
+
+.apple-form {
+    display: none;
+    z-index: 10;
+    position: absolute;
+    top: 0;
+    left: 35px;
+    background: #fff;
+    height: 89px;
+    width: 90px;
+    font-size: 18px;
+    border-radius: 4px;
+    border: 1px solid #8e6d6d;
+    padding: 2px;
+}
+
+.apple-form .my-btn {
+    width: 100%;
 }
